@@ -1,16 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <base href="https://cdn.jsdelivr.net/gh/genizy/soundboard@main/">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5521219086088837" crossorigin="anonymous"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-WX5VS54ZDW"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-
-        function gtag() {
-            dataLayer.push(arguments);
-        }
+        function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
         gtag('config', 'G-WX5VS54ZDW');
     </script>
@@ -20,13 +16,15 @@
     <script src="main.js" type="module"></script>
     <link href="style.css" rel="stylesheet">
 </head>
-
 <body>
     <div id="controls">
         <button id="toggleFavorites" class="control-button favorites-toggle">⭐ Favorites: OFF</button>
         <button id="toggleButton" class="control-button overlap-toggle">🔇 Overlap: OFF</button>
         <button id="stopButton" class="control-button stop-button">⏹️ Stop All Sounds</button>
-        <input id="searchInput" type="text" placeholder="Search sounds...">
+        <div id="search-input-wrapper">
+            <input id="searchInput" type="text" placeholder="Search sounds...">
+            <span id="searchCount"></span>
+        </div>
         <button id="ttsToggle" class="control-button tts-toggle">🗣️ Text-to-Speech</button>
     </div>
     <div id="ttsPanel" class="tts-panel hidden">
@@ -56,26 +54,20 @@
                 <label class="tts-label">Filter by Lang</label>
                 <select id="ttsLangFilter" class="tts-select"></select>
             </div>
-
         </div>
-        
         <div id="ttsStatus" class="tts-status">Ready</div>
-
         <div class="tts-actions">
-            <button id="ttsSpeak" class="tts-btn tts-btn-speak">▶ Speak</button>
-            <button id="ttsPause" class="tts-btn tts-btn-pause" disabled>⏸ Pause</button>
+            <button id="ttsSpeak"  class="tts-btn tts-btn-speak">▶ Speak</button>
+            <button id="ttsPause"  class="tts-btn tts-btn-pause"  disabled>⏸ Pause</button>
             <button id="ttsResume" class="tts-btn tts-btn-resume" disabled>▶ Resume</button>
-            <button id="ttsStop" class="tts-btn tts-btn-stop" disabled>⏹ Stop</button>
-            <button id="ttsReset" class="tts-btn tts-btn-reset">↺ Reset</button>
+            <button id="ttsStop"   class="tts-btn tts-btn-stop"   disabled>⏹ Stop</button>
+            <button id="ttsReset"  class="tts-btn tts-btn-reset">↺ Reset</button>
         </div>
-
         <div id="ttsSpeaking" class="tts-speaking-display hidden">
             <span class="tts-speaking-label">Now speaking:</span>
             <span id="ttsCurrentWord" class="tts-current-word"></span>
         </div>
     </div>
-
     <div id="soundboard"></div>
 </body>
-
 </html>
