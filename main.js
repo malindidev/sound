@@ -143,7 +143,8 @@ function playSound(sound, btn) {
     setTimeout(() => btn.classList.remove('pressed'), 120);
 
     audio.addEventListener('ended', () => {
-        btn.classList.remove('playing');
+        const mappedBtn = playingMap.get(audio);
+        if (mappedBtn) mappedBtn.classList.remove('playing');
         playingMap.delete(audio);
         currentAudios = currentAudios.filter(a => a !== audio);
     });
@@ -179,8 +180,12 @@ function renderMain(filter = '') {
     const catName = activeCategory === 'all' ? 'All Sounds'
         : activeCategory === 'favorites' ? '⭐ Favorites'
         : activeCategory;
-    label.childNodes[0].textContent = catName + ' ';
+
+    // FIX: safely set the label text without assuming childNodes structure
+    label.textContent = '';
+    label.append(catName + ' ', countBadge);
     countBadge.textContent = pool.length;
+
     searchCount.textContent = filter ? `${pool.length} results` : '';
 
     pool.forEach(s => grid.appendChild(makeBtn(s)));
@@ -232,14 +237,20 @@ function showCtxMenu(event, sound, btn) {
     menu.appendChild(favItem);
     menu.appendChild(dlItem);
 
-    const scrollX = window.scrollX || window.pageXOffset;
-    const scrollY = window.scrollY || window.pageYOffset;
-    let x = event.clientX + scrollX;
-    let y = event.clientY + scrollY;
-    if (x + 180 > document.body.scrollWidth) x -= 180;
-    if (y + 120 > document.body.scrollHeight) y -= 120;
-    menu.style.left = x + 'px';
-    menu.style.top  = y + 'px';
+    menu.style.visibility = 'hidden';
+    menu.style.left = '0px';
+    menu.style.top  = '0px';
+    requestAnimationFrame(() => {
+        const menuW = menu.offsetWidth;
+        const menuH = menu.offsetHeight;
+        let x = event.clientX + (window.scrollX || window.pageXOffset);
+        let y = event.clientY + (window.scrollY || window.pageYOffset);
+        if (event.clientX + menuW > window.innerWidth)  x -= menuW;
+        if (event.clientY + menuH > window.innerHeight) y -= menuH;
+        menu.style.left = x + 'px';
+        menu.style.top  = y + 'px';
+        menu.style.visibility = '';
+    });
 }
 
 document.addEventListener('click', e => {
@@ -374,12 +385,16 @@ document.getElementById('ttsSpeak').onclick = () => {
 document.getElementById('ttsPause').onclick  = () => { if (synth.speaking && !synth.paused) synth.pause(); document.getElementById('ttsPause').disabled = true; document.getElementById('ttsResume').disabled = false; };
 document.getElementById('ttsResume').onclick = () => { if (synth.paused) synth.resume(); document.getElementById('ttsPause').disabled = false; document.getElementById('ttsResume').disabled = true; };
 document.getElementById('ttsStop').onclick   = () => { synth.cancel(); setTtsBtns(false); document.getElementById('ttsSpeaking').classList.add('hidden'); setTtsStatus('Stopped', 'idle'); };
+
+// FIX: ttsReset now correctly resets each slider to its own default value
 document.getElementById('ttsReset').onclick  = () => {
-    ['ttsVolume','ttsRate','ttsPitch'].forEach(id => {
+    const defaults = { ttsVolume: 1, ttsRate: 1, ttsPitch: 1 };
+    const decimals = { ttsVolume: 2, ttsRate: 1, ttsPitch: 2 };
+    Object.entries(defaults).forEach(([id, def]) => {
         const el = document.getElementById(id);
         const val = document.getElementById(id + 'Val');
-        el.value = id === 'ttsRate' ? 1 : 1;
-        val.textContent = id === 'ttsRate' ? '1.0' : '1.00';
+        el.value = def;
+        val.textContent = def.toFixed(decimals[id]);
     });
     document.getElementById('ttsLangFilter').value = '';
     populateVoices('');
