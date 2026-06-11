@@ -187,6 +187,7 @@ function playSound(sound, btn) {
 }
 
 function renderRecent() {
+    if (activeCategory === 'gifs') return;
     const recent = getRecent();
     const section = document.getElementById('recent-section');
     const grid = document.getElementById('recent-grid');
@@ -201,6 +202,7 @@ function renderRecent() {
 }
 
 function renderMain(filter = '') {
+    if (activeCategory === 'gifs') return;
     const pool = getPool(filter);
     const grid = document.getElementById('soundboard');
     const label = document.getElementById('section-label');
@@ -214,6 +216,7 @@ function renderMain(filter = '') {
         : activeCategory === 'favorites' ? '⭐ Favorites'
         : activeCategory;
 
+    // FIX: safely set the label text without assuming childNodes structure
     label.textContent = '';
     label.append(catName + ' ', countBadge);
     countBadge.textContent = pool.length;
@@ -269,6 +272,7 @@ function showCtxMenu(event, sound, btn) {
     menu.appendChild(favItem);
     menu.appendChild(dlItem);
 
+    // FIX: clamp using viewport dimensions, not scrollHeight (unreliable)
     menu.style.visibility = 'hidden';
     menu.style.left = '0px';
     menu.style.top  = '0px';
@@ -309,6 +313,7 @@ function stopAll() {
 }
 
 document.getElementById('searchInput').addEventListener('input', e => {
+    if (activeCategory === 'gifs') return;
     renderMain(e.target.value);
 });
 
@@ -418,6 +423,7 @@ document.getElementById('ttsPause').onclick  = () => { if (synth.speaking && !sy
 document.getElementById('ttsResume').onclick = () => { if (synth.paused) synth.resume(); document.getElementById('ttsPause').disabled = false; document.getElementById('ttsResume').disabled = true; };
 document.getElementById('ttsStop').onclick   = () => { synth.cancel(); setTtsBtns(false); document.getElementById('ttsSpeaking').classList.add('hidden'); setTtsStatus('Stopped', 'idle'); };
 
+// FIX: ttsReset now correctly resets each slider to its own default value
 document.getElementById('ttsReset').onclick  = () => {
     const defaults = { ttsVolume: 1, ttsRate: 1, ttsPitch: 1 };
     const decimals = { ttsVolume: 2, ttsRate: 1, ttsPitch: 2 };
