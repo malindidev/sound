@@ -1,4 +1,5 @@
 import { sounds } from './sounds.js';
+import { initGifPanel, destroyGifPanel, isGifMode } from './gifs.js';
 
 const RECENT_KEY   = 'sb_recent';
 const FAV_KEY      = 'sb_favorites';
@@ -68,6 +69,16 @@ function buildCategories() {
     favBtn.onclick = () => setCategory('favorites');
     list.appendChild(favBtn);
 
+    const gifBtn = document.createElement('button');
+    gifBtn.className = 'cat-btn cat-btn--gif';
+    gifBtn.dataset.cat = 'gifs';
+    const gifBadge = document.createElement('span');
+    gifBadge.className = 'cat-count cat-count--gif';
+    gifBadge.textContent = 'GIF';
+    gifBtn.append('🎭 Meme GIFs', gifBadge);
+    gifBtn.onclick = () => setCategory('gifs');
+    list.appendChild(gifBtn);
+
     Object.entries(CATEGORIES).forEach(([name, test]) => {
         const matches = allSounds.filter(test);
         if (matches.length < 3) return;
@@ -87,7 +98,29 @@ function setCategory(cat) {
     activeCategory = cat;
     document.querySelectorAll('.cat-btn').forEach(b => b.classList.toggle('active', b.dataset.cat === cat));
     document.getElementById('searchInput').value = '';
-    renderMain();
+
+    if (cat === 'gifs') {
+        // Hide sound sections, show GIF panel
+        document.getElementById('recent-section').classList.add('hidden');
+        document.getElementById('main-section').classList.add('hidden');
+        const content = document.getElementById('content');
+        let gifWrap = document.getElementById('gif-wrap');
+        if (!gifWrap) {
+            gifWrap = document.createElement('div');
+            gifWrap.id = 'gif-wrap';
+            content.appendChild(gifWrap);
+        }
+        gifWrap.style.display = '';
+        initGifPanel(gifWrap, () => setCategory('all'));
+    } else {
+        // Tear down GIF panel if leaving
+        const gifWrap = document.getElementById('gif-wrap');
+        if (gifWrap) gifWrap.style.display = 'none';
+        destroyGifPanel();
+        document.getElementById('main-section').classList.remove('hidden');
+        renderMain();
+        renderRecent();
+    }
 }
 
 function getPool(filter = '') {
@@ -237,6 +270,7 @@ function showCtxMenu(event, sound, btn) {
     menu.appendChild(favItem);
     menu.appendChild(dlItem);
 
+    // FIX: clamp using viewport dimensions, not scrollHeight (unreliable)
     menu.style.visibility = 'hidden';
     menu.style.left = '0px';
     menu.style.top  = '0px';
