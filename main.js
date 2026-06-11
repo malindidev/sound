@@ -214,7 +214,6 @@ function renderMain(filter = '') {
         : activeCategory === 'favorites' ? '⭐ Favorites'
         : activeCategory;
 
-    // FIX: safely set the label text without assuming childNodes structure
     label.textContent = '';
     label.append(catName + ' ', countBadge);
     countBadge.textContent = pool.length;
@@ -270,7 +269,6 @@ function showCtxMenu(event, sound, btn) {
     menu.appendChild(favItem);
     menu.appendChild(dlItem);
 
-    // FIX: clamp using viewport dimensions, not scrollHeight (unreliable)
     menu.style.visibility = 'hidden';
     menu.style.left = '0px';
     menu.style.top  = '0px';
@@ -420,7 +418,6 @@ document.getElementById('ttsPause').onclick  = () => { if (synth.speaking && !sy
 document.getElementById('ttsResume').onclick = () => { if (synth.paused) synth.resume(); document.getElementById('ttsPause').disabled = false; document.getElementById('ttsResume').disabled = true; };
 document.getElementById('ttsStop').onclick   = () => { synth.cancel(); setTtsBtns(false); document.getElementById('ttsSpeaking').classList.add('hidden'); setTtsStatus('Stopped', 'idle'); };
 
-// FIX: ttsReset now correctly resets each slider to its own default value
 document.getElementById('ttsReset').onclick  = () => {
     const defaults = { ttsVolume: 1, ttsRate: 1, ttsPitch: 1 };
     const decimals = { ttsVolume: 2, ttsRate: 1, ttsPitch: 2 };
