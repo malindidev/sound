@@ -29,7 +29,6 @@ html, body {
     overflow-x: hidden;
 }
 
-/* ─── TOPBAR ─────────────────────────────────────────────── */
 
 #topbar {
     position: fixed;
@@ -98,7 +97,6 @@ html, body {
 .tts-toggle:hover { background: #0d2535; border-color: #7ee8ff44; }
 .tts-toggle-active { background: #7ee8ff; color: #0a1e28; border-color: transparent; }
 
-/* ─── LAYOUT ─────────────────────────────────────────────── */
 
 #main-layout {
     display: flex;
@@ -106,7 +104,6 @@ html, body {
     min-height: 100vh;
 }
 
-/* ─── SIDEBAR ────────────────────────────────────────────── */
 
 #sidebar {
     width: var(--sidebar-w);
@@ -245,7 +242,6 @@ html, body {
 #recent-section { margin-bottom: 32px; }
 #recent-section.hidden { display: none; }
 
-/* ─── SOUND GRID ─────────────────────────────────────────── */
 
 .sound-grid {
     display: grid;
@@ -338,7 +334,6 @@ html, body {
     opacity: 0.9;
 }
 
-/* ─── CONTEXT MENU ───────────────────────────────────────── */
 
 #ctx-menu {
     position: absolute;
@@ -384,11 +379,9 @@ html, body {
 }
 .ctx-item:hover { background: var(--bg4); }
 
-/* ─── MOBILE NAV ─────────────────────────────────────────── */
 
 #mobile-nav { display: none; }
 
-/* ─── TTS PANEL ──────────────────────────────────────────── */
 
 #ttsPanel {
     position: fixed;
@@ -470,7 +463,6 @@ html, body {
 }
 .tts-current-word.word-pop { animation: word-pop-anim 0.2s ease-out forwards; }
 
-/* ─── MOBILE ─────────────────────────────────────────────── */
 
 @media (max-width: 700px) {
     #sidebar { display: none; }
@@ -515,7 +507,6 @@ html, body {
     .tts-control-group.full-width { grid-column: 1; }
 }
 
-/* ─── GIF MEME PANEL ─────────────────────────────────────── */
 
 .cat-btn--gif {
     color: #c084fc;
