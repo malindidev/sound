@@ -45,16 +45,33 @@ body {
     border-color: transparent;
 }
 
-#search-input {
+#search-input-wrapper {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 150px;
+    position: relative;
+}
+
+#searchInput {
     padding: 0.5rem 1rem;
     border-radius: 8px;
     border: 1px solid #444;
     background: #222;
     color: white;
-    flex: 1;
+    width: 100%;
     min-width: 150px;
+    box-sizing: border-box;
 }
-#search-input:focus { outline: none; border-color: #7ee8ff; }
+#searchInput:focus { outline: none; border-color: #7ee8ff; }
+
+#searchCount {
+    position: absolute;
+    right: 10px;
+    font-size: 0.72rem;
+    color: #666;
+    pointer-events: none;
+}
 
 #soundboard {
     display: flex;
@@ -69,12 +86,12 @@ body {
     flex-direction: column;
     align-items: center;
     width: 120px;
+    transition: transform 150ms, filter 150ms;
 }
 
 .sound-wrapper:hover {
     transform: scale(1.05);
     filter: brightness(1.2);
-    transition: 10ms;
 }
 
 .sound-button-img {
@@ -94,13 +111,23 @@ body {
     background-position: center;
     background-blend-mode: multiply;
     border-radius: 50%;
-    transition: transform 0.1s, filter 0.2s;
+    transition: transform 0.1s, filter 0.2s, box-shadow 0.2s;
     box-shadow: 0 0 8px var(--btn-color);
 }
 
 .sound-image.pressed {
     background-image: url('https://cdn.jsdelivr.net/gh/genizy/soundboard@155ea6666132bde6f7f14c413431e0fd7eaeaba9/button_pressed.png');
     transform: scale(0.95);
+}
+
+.sound-image.playing {
+    box-shadow: 0 0 0 3px #fff, 0 0 16px var(--btn-color), 0 0 32px var(--btn-color);
+    animation: playing-pulse 1s ease-in-out infinite alternate;
+}
+
+@keyframes playing-pulse {
+    from { box-shadow: 0 0 0 3px #fff8, 0 0 12px var(--btn-color); }
+    to   { box-shadow: 0 0 0 3px #fff,  0 0 28px var(--btn-color); }
 }
 
 .sound-label {
@@ -113,15 +140,45 @@ body {
 }
 
 .right-click-panel {
-    background: white;
-    border: 1px solid #ccc;
-    padding: 8px;
-    z-index: 1000;
-    border-radius: 4px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    background: #1a1a1a;
+    border: 1px solid #333;
+    padding: 6px;
+    z-index: 9999;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+    min-width: 160px;
+    overflow: hidden;
 }
-.right-click-panel-label  { font-weight: bold; margin-bottom: 5px; }
-.right-click-panel-button { padding: 5px; }
+
+.right-click-panel-label {
+    font-size: 0.72rem;
+    font-weight: bold;
+    color: #888;
+    padding: 4px 10px 8px;
+    border-bottom: 1px solid #2a2a2a;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+}
+
+.right-click-panel-button {
+    display: block;
+    width: 100%;
+    padding: 8px 12px;
+    background: none;
+    border: none;
+    color: #eee;
+    font-size: 0.85rem;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background 0.12s;
+}
+.right-click-panel-button:hover {
+    background: #2a2a2a;
+}
 
 #ttsPanel {
     position: fixed;
