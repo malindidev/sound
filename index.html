@@ -11,23 +11,25 @@
         gtag('config', 'G-WX5VS54ZDW');
     </script>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Soundboard</title>
+    <link href="style.css" rel="stylesheet">
     <script src="sounds.js" type="module"></script>
     <script src="main.js" type="module"></script>
-    <link href="style.css" rel="stylesheet">
 </head>
 <body>
-    <div id="controls">
-        <button id="toggleFavorites" class="control-button favorites-toggle">⭐ Favorites: OFF</button>
-        <button id="toggleButton" class="control-button overlap-toggle">🔇 Overlap: OFF</button>
-        <button id="stopButton" class="control-button stop-button">⏹️ Stop All Sounds</button>
-        <div id="search-input-wrapper">
-            <input id="searchInput" type="text" placeholder="Search sounds...">
-            <span id="searchCount"></span>
+    <div id="topbar">
+        <div id="topbar-left">
+            <span id="site-title">💥 SOUNDBOARD</span>
         </div>
-        <button id="ttsToggle" class="control-button tts-toggle">🗣️ Text-to-Speech</button>
+        <div id="topbar-right">
+            <button id="ttsToggle" class="tb-btn tts-toggle">🗣️ TTS</button>
+            <button id="toggleButton" class="tb-btn overlap-toggle">🔇 Overlap: OFF</button>
+            <button id="stopButton" class="tb-btn stop-button">⏹️ Stop</button>
+        </div>
     </div>
-    <div id="ttsPanel" class="tts-panel hidden">
+
+    <div id="ttsPanel" class="hidden">
         <div class="tts-panel-header">
             <span class="tts-title">🎙️ Text-to-Speech</span>
             <button id="ttsClose" class="tts-close">✕</button>
@@ -51,7 +53,7 @@
                 <input type="range" id="ttsPitch" class="tts-slider" min="0" max="2" step="0.05" value="1">
             </div>
             <div class="tts-control-group">
-                <label class="tts-label">Filter by Lang</label>
+                <label class="tts-label">Language</label>
                 <select id="ttsLangFilter" class="tts-select"></select>
             </div>
         </div>
@@ -64,10 +66,40 @@
             <button id="ttsReset"  class="tts-btn tts-btn-reset">↺ Reset</button>
         </div>
         <div id="ttsSpeaking" class="tts-speaking-display hidden">
-            <span class="tts-speaking-label">Now speaking:</span>
+            <span class="tts-speaking-label">Now saying:</span>
             <span id="ttsCurrentWord" class="tts-current-word"></span>
         </div>
     </div>
-    <div id="soundboard"></div>
+
+    <div id="main-layout">
+        <aside id="sidebar">
+            <div id="search-wrap">
+                <input id="searchInput" type="text" placeholder="🔍 Search...">
+                <span id="searchCount"></span>
+            </div>
+            <nav id="category-list"></nav>
+        </aside>
+
+        <div id="content">
+            <section id="recent-section" class="hidden">
+                <h2 class="section-heading">🕒 Recently Played</h2>
+                <div id="recent-grid" class="sound-grid"></div>
+            </section>
+            <section id="main-section">
+                <h2 class="section-heading" id="section-label">All Sounds <span id="sound-count"></span></h2>
+                <div id="soundboard" class="sound-grid"></div>
+            </section>
+        </div>
+    </div>
+
+    <nav id="mobile-nav">
+        <button class="mob-nav-btn active" data-view="all">🔊 All</button>
+        <button class="mob-nav-btn" data-view="favorites">⭐ Favs</button>
+        <button class="mob-nav-btn" data-view="recent">🕒 Recent</button>
+        <button class="mob-nav-btn" id="mob-stop">⏹ Stop</button>
+        <button class="mob-nav-btn" id="mob-tts">🗣️ TTS</button>
+    </nav>
+
+    <div id="ctx-menu" class="hidden"></div>
 </body>
 </html>
